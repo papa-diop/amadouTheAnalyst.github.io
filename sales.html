@@ -1,0 +1,292 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Amadou Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="fade-in">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Amadou The analyst</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">Welcome !</a></li>
+							<li class="active"><a href="#main">Sales Management Project</a></li>
+							<li><a href="youtubers.html">Top UK YouTubers in 2024 Project</a></li>
+						</ul>
+						
+						<ul class="icons alt">
+                            <li><a href="https://www.linkedin.com/in/papaamadoudiop/" target="_blank" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
+                            <li><a href="https://github.com/papa-diop" target="_blank" class="icon brands fa-github"><span class="label">GitHub</span></a></li></ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<!-- Featured Post -->
+                        <article class="post featured">
+                            <header class="major">
+                                <h2><a href="https://papa-diop.github.io/top_uk_youtubers_24.github.io/" target="_blank">Sales Management<br />
+                                </a></h2>
+                            </header>
+                            <img src="images/dashboard-2.png"/>
+                        </article>
+
+						<!-- Posts -->
+                        <h2>Business Request &amp; User Stories </h2>
+                        <p>The business request for this data analyst project was an executive sales report for sales managers. Based on the request that was made from the business we following user stories were defined to fulfill delivery and ensure that acceptance criteria’s were maintained throughout the project.</p>
+                        <figure class="wp-block-table is-style-stripes">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><strong> #</strong></td>
+                                        <td><strong>As a (role)</strong></td>
+                                        <td><strong>I want (request / demand)</strong></td>
+                                        <td><strong>So that I (user value)</strong></td>
+                                        <td><strong>Acceptance Criteria</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>1</strong></td>
+                                        <td>Sales Manager</td>
+                                        <td>To get a dashboard overview of internet sales</td>
+                                        <td>Can follow better which customers and products sells the best</td>
+                                        <td>A Power BI dashboard which updates data once a day</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>2</strong></td>
+                                        <td>Sales Representative</td>
+                                        <td>A detailed overview of Internet Sales per Customers</td>
+                                        <td>Can follow up my customers that buys the most and who we can sell more to</td>
+                                        <td>A Power BI dashboard which allows me to filter data for each customer</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>3</strong></td>
+                                        <td>Sales Representative</td>
+                                        <td>A detailed overview of Internet Sales per Products</td>
+                                        <td>Can follow up my Products that sells the most</td>
+                                        <td>A Power BI dashboard which allows me to filter data for each Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>4</strong></td><td>Sales Manager</td>
+                                        <td>A dashboard overview of internet sales</td>
+                                        <td>Follow sales over time against budget</td>
+                                        <td>A Power Bi dashboard with graphs and KPIs comparing against budget.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </figure>
+                        <h2>Data Cleaning &amp; Transformation (SQL)</h2>
+                        <p>
+                            To create the necessary data model for doing analysis and fulfilling the business needs defined
+                            in the user stories the following tables were extracted using SQL.
+                            e data source (sales budgets) were provided in Excel format and were connected in
+                            the data model in a later step of the process.
+                            Below are the SQL statements for cleansing and transforming necessary data.
+                        </p>
+                        <strong>DIM_Calendar:</strong>
+                        <pre class="wp-block-code" style="font-size:12px;"><code>-- Cleansed DIM_Date Table --
+                        SELECT 
+                        &#091;DateKey], 
+                        &#091;FullDateAlternateKey] AS Date, 
+                        --&#091;DayNumberOfWeek], 
+                        &#091;EnglishDayNameOfWeek] AS Day, 
+                        --&#091;SpanishDayNameOfWeek], 
+                        --&#091;FrenchDayNameOfWeek], 
+                        --&#091;DayNumberOfMonth], 
+                        --&#091;DayNumberOfYear], 
+                        --&#091;WeekNumberOfYear],
+                        &#091;EnglishMonthName] AS Month, 
+                        Left(&#091;EnglishMonthName], 3) AS MonthShort,   -- Useful for front end date navigation and front end graphs.
+                        --&#091;SpanishMonthName], 
+                        --&#091;FrenchMonthName], 
+                        &#091;MonthNumberOfYear] AS MonthNo, 
+                        &#091;CalendarQuarter] AS Quarter, 
+                        &#091;CalendarYear] AS Year --&#091;CalendarSemester], 
+                        --&#091;FiscalQuarter], 
+                        --&#091;FiscalYear], 
+                        --&#091;FiscalSemester] 
+                        FROM 
+                        &#091;AdventureWorksDW2019].&#091;dbo].&#091;DimDate]
+                        WHERE 
+                        CalendarYear &gt;= 2019
+                        </code></pre>
+
+                        <p><strong>DIM_Customers</strong>:</p>
+                        <pre class="wp-block-code" style="font-size:12px;"><code>-- Cleansed DIM_Customers Table --
+                        SELECT 
+                        c.customerkey AS CustomerKey, 
+                        --      ,&#091;GeographyKey]
+                        --      ,&#091;CustomerAlternateKey]
+                        --      ,&#091;Title]
+                        c.firstname AS &#091;First Name], 
+                        --      ,&#091;MiddleName]
+                        c.lastname AS &#091;Last Name], 
+                        c.firstname + ' ' + lastname AS &#091;Full Name], 
+                        -- Combined First and Last Name
+                        --      ,&#091;NameStyle]
+                        --      ,&#091;BirthDate]
+                        --      ,&#091;MaritalStatus]
+                        --      ,&#091;Suffix]
+                        CASE c.gender WHEN 'M' THEN 'Male' WHEN 'F' THEN 'Female' END AS Gender,
+                        --      ,&#091;EmailAddress]
+                        --      ,&#091;YearlyIncome]
+                        --      ,&#091;TotalChildren]
+                        --      ,&#091;NumberChildrenAtHome]
+                        --      ,&#091;EnglishEducation]
+                        --      ,&#091;SpanishEducation]
+                        --      ,&#091;FrenchEducation]
+                        --      ,&#091;EnglishOccupation]
+                        --      ,&#091;SpanishOccupation]
+                        --      ,&#091;FrenchOccupation]
+                        --      ,&#091;HouseOwnerFlag]
+                        --      ,&#091;NumberCarsOwned]
+                        --      ,&#091;AddressLine1]
+                        --      ,&#091;AddressLine2]
+                        --      ,&#091;Phone]
+                        c.datefirstpurchase AS DateFirstPurchase, 
+                        --      ,&#091;CommuteDistance]
+                        g.city AS &#091;Customer City] -- Joined in Customer City from Geography Table
+                        FROM 
+                        &#091;AdventureWorksDW2019].&#091;dbo].&#091;DimCustomer] as c
+                        LEFT JOIN dbo.dimgeography AS g ON g.geographykey = c.geographykey 
+                        ORDER BY 
+                        CustomerKey ASC -- Ordered List by CustomerKey
+                        </code></pre>
+
+                        <p><strong>DIM_Products:</strong></p>
+                        <pre class="wp-block-code" style="font-size:12px;"><code>-- Cleansed DIM_Products Table --
+                        SELECT 
+                        p.&#091;ProductKey], 
+                        p.&#091;ProductAlternateKey] AS ProductItemCode, 
+                        --      ,&#091;ProductSubcategoryKey], 
+                        --      ,&#091;WeightUnitMeasureCode]
+                        --      ,&#091;SizeUnitMeasureCode] 
+                        p.&#091;EnglishProductName] AS &#091;Product Name], 
+                        ps.EnglishProductSubcategoryName AS &#091;Sub Category], -- Joined in from Sub Category Table
+                        pc.EnglishProductCategoryName AS &#091;Product Category], -- Joined in from Category Table
+                        --      ,&#091;SpanishProductName]
+                        --      ,&#091;FrenchProductName]
+                        --      ,&#091;StandardCost]
+                        --      ,&#091;FinishedGoodsFlag] 
+                        p.&#091;Color] AS &#091;Product Color], 
+                        --      ,&#091;SafetyStockLevel]
+                        --      ,&#091;ReorderPoint]
+                        --      ,&#091;ListPrice] 
+                        p.&#091;Size] AS &#091;Product Size], 
+                        --      ,&#091;SizeRange]
+                        --      ,&#091;Weight]
+                        --      ,&#091;DaysToManufacture]
+                        p.&#091;ProductLine] AS &#091;Product Line], 
+                        --     ,&#091;DealerPrice]
+                        --      ,&#091;Class]
+                        --      ,&#091;Style] 
+                        p.&#091;ModelName] AS &#091;Product Model Name], 
+                        --      ,&#091;LargePhoto]
+                        p.&#091;EnglishDescription] AS &#091;Product Description], 
+                        --      ,&#091;FrenchDescription]
+                        --      ,&#091;ChineseDescription]
+                        --      ,&#091;ArabicDescription]
+                        --      ,&#091;HebrewDescription]
+                        --      ,&#091;ThaiDescription]
+                        --      ,&#091;GermanDescription]
+                        --      ,&#091;JapaneseDescription]
+                        --      ,&#091;TurkishDescription]
+                        --      ,&#091;StartDate], 
+                        --      ,&#091;EndDate], 
+                        ISNULL (p.Status, 'Outdated') AS &#091;Product Status] 
+                        FROM 
+                        &#091;AdventureWorksDW2019].&#091;dbo].&#091;DimProduct] as p
+                        LEFT JOIN dbo.DimProductSubcategory AS ps ON ps.ProductSubcategoryKey = p.ProductSubcategoryKey 
+                        LEFT JOIN dbo.DimProductCategory AS pc ON ps.ProductCategoryKey = pc.ProductCategoryKey 
+                        order by 
+                        p.ProductKey asc
+                        </code></pre>
+
+                        <p><strong>FACT_InternetSales:</strong></p>
+                        <pre class="wp-block-code" style="font-size:12px;"><code>-- Cleansed FACT_InternetSales Table --
+                        SELECT 
+                        &#091;ProductKey], 
+                        &#091;OrderDateKey], 
+                        &#091;DueDateKey], 
+                        &#091;ShipDateKey], 
+                        &#091;CustomerKey], 
+                        --  ,&#091;PromotionKey]
+                        --  ,&#091;CurrencyKey]
+                        --  ,&#091;SalesTerritoryKey]
+                        &#091;SalesOrderNumber], 
+                        --  &#091;SalesOrderLineNumber], 
+                        --  ,&#091;RevisionNumber]
+                        --  ,&#091;OrderQuantity], 
+                        --  ,&#091;UnitPrice], 
+                        --  ,&#091;ExtendedAmount]
+                        --  ,&#091;UnitPriceDiscountPct]
+                        --  ,&#091;DiscountAmount] 
+                        --  ,&#091;ProductStandardCost]
+                        --  ,&#091;TotalProductCost] 
+                        &#091;SalesAmount] --  ,&#091;TaxAmt]
+                        --  ,&#091;Freight]
+                        --  ,&#091;CarrierTrackingNumber] 
+                        --  ,&#091;CustomerPONumber] 
+                        --  ,&#091;OrderDate] 
+                        --  ,&#091;DueDate] 
+                        --  ,&#091;ShipDate] 
+                        FROM 
+                        &#091;AdventureWorksDW2019].&#091;dbo].&#091;FactInternetSales]
+                        WHERE 
+                        LEFT (OrderDateKey, 4) &gt;= YEAR(GETDATE()) -2 -- Ensures we always only bring two years of date from extraction.
+                        ORDER BY
+                        OrderDateKey ASC
+                        </code></pre>
+
+                        <h2>Data Model</h2>
+                        <p>
+                            Below is a screenshot of the data model after cleaned and prepared
+                            tables were read into Power BI. This data model also shows how FACT_Budget
+                            hsa been connected to FACT_InternetSales and other necessary DIM tables.
+                        </p>
+                        
+                        <img src="images/datamodel.webp" alt="Image 2" style="width: 100%; object-fit: cover;">
+                        <h2>Sales Management Dashboard</h2>
+                        <p>
+                            The finished sales management dashboard with one page with works as a 
+                            dashboard and overview, with two other pages focused on combining tables for
+                            necessary details and visualizations to show sales over time, per customers and per products.
+                        </p>
+                        <img src="images/dashboard-2.png" alt="Image 2" style="width: 100%; object-fit: cover;">   
+                    </div>
+
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section class="split contact">
+							<section>
+								<h3>Socials</h3>
+								<ul class="icons alt">
+									<li><a href="https://www.linkedin.com/in/papaamadoudiop/" target="_blank" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
+									<li><a href="https://github.com/papa-diop" target="_blank" class="icon brands fa-github"><span class="label">GitHub</span></a></li></ul>
+							</section>
+						</section>
+					</footer>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
